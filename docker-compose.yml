@@ -6,10 +6,15 @@ services:
       context: ./nginx
       dockerfile: ${NGINX_DOCKERFILE}
     ports:
-    - "${NGINX_PORT}:80"
+      - "${NGINX_PORT}:80"
+    depends_on:
+      - server
     links:
       - client
       - server
+    ## FOR PRODUCTION USE ONLY
+    volumes:
+      - ./client/build:/usr/src/build
 
   ### Server
   server:
@@ -17,13 +22,13 @@ services:
       context: ./server
       dockerfile: ${SERVER_DOCKERFILE}
     volumes:
-    - ./server:/usr/src/app
+      - ./server:/usr/src/app
     ports:
-    - "${SERVER_PORT}:4000"
+      - "${SERVER_PORT}:4000"
     links:
-    - postgres
+      - postgres
     depends_on:
-    - postgres
+      - postgres
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
       DEBUG: ${SERVER_DEBUG}
@@ -35,11 +40,11 @@ services:
       context: ./client
       dockerfile: ${CLIENT_DOCKERFILE}
     volumes:
-    - ./client:/usr/src/app
+      - ./client:/usr/src/app
     ports:
-    - "${CLIENT_PORT}:3000"
+      - "${CLIENT_PORT}:3000"
     depends_on:
-    - server
+      - server
     environment:
       REACT_APP_GRAPHQL: ${REACT_APP_GRAPHQL}
       DEBUG: ${CLIENT_DEBUG}
@@ -57,9 +62,9 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     ports:
-    - "${PGADMIN_PORT}:80"
+      - "${PGADMIN_PORT}:80"
     depends_on:
-    - postgres
+      - postgres
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}

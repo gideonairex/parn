@@ -1,0 +1,9 @@
+FROM node:10.13.0-alpine
+
+# Set working directory
+COPY . /usr/src/app
+
+# ADD ./ /usr/src/app
+WORKDIR /usr/src/app
+
+CMD ["yarn", "build"]
