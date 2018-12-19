@@ -1,0 +1,10 @@
+FROM node:10.13.0-alpine
+
+# Install nodemon for development
+RUN npm install -g nodemon
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Run server
+CMD ["nodemon"]

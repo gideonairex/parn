@@ -1,3 +1,6 @@
+# Ignore .env file copy .env.default
+.env
+
 # Logs
 logs
 *.log
